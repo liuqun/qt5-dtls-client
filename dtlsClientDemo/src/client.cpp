@@ -14,7 +14,7 @@ Client::Client(QObject *parent): crypto(QSslSocket::SslClientMode)
     // setup debug and warning mode
 }
 
-void Client::setup(const QHostAddress &address, quint16 port, const QString &connectionName)
+void Client::setupWithIdAndPsk(const QHostAddress &address, quint16 port, const QString &progName, const QByteArray &idValue, const QByteArray &pskValue)
 {
     qDebug() << "Debug:setup():" << __FILE__ << ":" << __LINE__;
     auto configuration = QSslConfiguration::defaultDtlsConfiguration();
@@ -28,10 +28,13 @@ void Client::setup(const QHostAddress &address, quint16 port, const QString &con
     pingTimer.setInterval(5000);
     connect(&pingTimer, &QTimer::timeout, this, &Client::pingTimeout);
 
-    name = connectionName;
+    name = progName;
 
     socket.connectToHost(crypto.peerAddress().toString(), crypto.peerPort()); // FIXME: I am not sure how to use QUdpSocket::connectToHost(...)
     connect(&socket, &QUdpSocket::readyRead, this, &Client::readyReadCallbackSlot);
+
+    myPreSharedKeyByteArray = pskValue;
+    myIdentityByteArray = idValue;
 }
 
 Client::~Client()
@@ -132,8 +135,8 @@ void Client::pskRequiredCallbackSlot(QSslPreSharedKeyAuthenticator *auth)
     Q_ASSERT(auth);
     qDebug() << "in pskRequiredCallbackSlot()...";
     qDebug() << tr("%1: providing pre-shared key ...").arg(name);//emit infoMessage(tr("%1: providing pre-shared key ...").arg(name));
-    auth->setIdentity(name.toLatin1());
-    auth->setPreSharedKey(QByteArrayLiteral("\x1a\x2b\x3c\x4d\x5e\x6f"));
+    auth->setIdentity(myIdentityByteArray);
+    auth->setPreSharedKey(myPreSharedKeyByteArray);
 }
 
 void Client::pingTimeout()

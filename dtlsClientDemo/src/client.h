@@ -19,7 +19,7 @@ class Client : public QObject
 public:
     explicit Client(QObject *parent = 0);
     ~Client();
-    void setup(const QHostAddress &address, quint16 port, const QString &connectionName);
+    void setupWithIdAndPsk(const QHostAddress &address, quint16 port, const QString &progName, const QByteArray &idValue, const QByteArray &pskValue);
     void startHandshake();
 
 //signals:
@@ -46,6 +46,8 @@ private:
     QString name;
     QUdpSocket socket;
     QDtls crypto;
+    QByteArray myIdentityByteArray;
+    QByteArray myPreSharedKeyByteArray;
 
     QTimer pingTimer;
     unsigned ping = 0;

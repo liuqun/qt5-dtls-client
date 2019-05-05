@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     QHostAddress remoteIpv4Addr(str);
 
     Client client;
-    client.setup(remoteIpv4Addr, remotePort, progName);
+    client.setupWithIdAndPsk(remoteIpv4Addr, remotePort, progName, progName.toLatin1(), QByteArrayLiteral("\x1a\x2b\x3c\x4d\x5e\x6f"));
 
     QObject::connect(&client, SIGNAL(clientDtlsErrorSignal()), &app, SLOT(quit()));
     QObject::connect(&app, SIGNAL(aboutToQuit()), &client, SLOT(clientCleanupCallbackSlot()));
