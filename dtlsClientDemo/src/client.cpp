@@ -102,6 +102,10 @@ void Client::readyReadCallbackSlot()
     } else {
         if (!crypto.doHandshake(&socket, dgram)) {
             qDebug() << tr("%1: handshake error - %2").arg(name, crypto.dtlsErrorString());//emit errorMessage(tr("%1: handshake error - %2").arg(name, crypto.dtlsErrorString()));
+            if (1) {
+                qDebug() << "Server side has shutdown DTLS session... Client will quit"; // FIXME
+                emit clientDtlsErrorSignal();
+            }
             return;
         }
 
