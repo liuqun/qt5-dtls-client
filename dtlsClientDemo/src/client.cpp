@@ -164,6 +164,7 @@ void Client::clientCleanupCallbackSlot()
     // sleep(1);   // wait for threads to stop.
     // delete any objects
     qDebug() << "receive a aboutToQuit() message...";
+    crypto.shutdown(&socket);
 }
 
 // vi: set ts=4 sw=4 expandtab :
