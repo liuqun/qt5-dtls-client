@@ -72,3 +72,8 @@ Thumbs.db
 *.exe
 
 demo
+
+# Qt Creator output dir
+build-*-Debug
+build-*-Release
+build-*-Profile
