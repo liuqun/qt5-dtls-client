@@ -57,7 +57,7 @@ void Client::incomingDatagramEventHandler()
         qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
         qDebug() << "!! Warning: Peer IP address and port didn't match!";
         qDebug() << "!! Expected IP/port = <"<< qPrintable(peerAddress.toString()) << ":" << peerPort <<">";
-        qDebug() << "!! Actually IP/port = <" << qPrintable(fromIp.toString()) << ":" << fromPort << ">";
+        qDebug() << "!! Actual IP/port = <" << qPrintable(fromIp.toString()) << ":" << fromPort << ">";
         qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
     }
     const QByteArray& plaintext = dgram;
