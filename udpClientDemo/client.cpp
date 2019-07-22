@@ -44,12 +44,22 @@ void Client::incomingDatagramEventHandler()
     qDebug() << "in onIncomingDatagramArrived()...";
     qint64 bytesPending = socket.pendingDatagramSize();
     QByteArray dgram(static_cast<int>(bytesPending), Qt::Uninitialized);
-    const qint64 bytesRead = socket.readDatagram(dgram.data(), dgram.size());
+    QHostAddress fromIp;
+    quint16 fromPort;
+    const qint64 bytesRead = socket.readDatagram(dgram.data(), dgram.size(), &fromIp, &fromPort);
     if (bytesRead <= 0) {
         qDebug() << qPrintable(name) << ":" << qPrintable(tr("Got an unexpected socket IO error!"));
         return;
     }
     dgram.resize(static_cast<int>(bytesRead));
+    qDebug() << "Got" << bytesRead << "bytes from IP =" << qPrintable(fromIp.toString()) << "port =" << fromPort;
+    if (!fromIp.isEqual(this->peerAddress) || fromPort!=this->peerPort) {
+        qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+        qDebug() << "!! Warning: Peer IP address and port didn't match!";
+        qDebug() << "!! Expected IP/port = <"<< qPrintable(peerAddress.toString()) << ":" << peerPort <<">";
+        qDebug() << "!! Actually IP/port = <" << qPrintable(fromIp.toString()) << ":" << fromPort << ">";
+        qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+    }
     const QByteArray& plaintext = dgram;
     if (plaintext.size()) {
         qDebug() << qPrintable(ParseServerResponse(name, dgram, plaintext));
