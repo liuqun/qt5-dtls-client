@@ -8,7 +8,7 @@
 void Client::init(const QHostAddress &peerAddress, quint16 peerPort, const QString& name, float heartbeatIntervalInSeconds)
 {
     long msec = std::lround(heartbeatIntervalInSeconds * 1000.0f);
-    udpHeartbeatTimer.setInterval(msec);
+    udpHeartbeatTimer.setInterval(static_cast<int>(msec));
     connect(&udpHeartbeatTimer, &QTimer::timeout, this, &Client::heartbeatTimerEventHandler);
 
     this->name = name;
