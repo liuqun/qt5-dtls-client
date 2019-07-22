@@ -91,7 +91,7 @@ void Client::clientTestStartHandler()
     udpHeartbeatTimer.start();
     const qint64 written = socket.writeDatagram(datagram, peerAddress, peerPort);
     if (written <= 0) {
-        qDebug() << qPrintable(name) << ":" << qPrintable(tr("failed to send a ping"));
+        qDebug() << qPrintable(name) << ":" << qPrintable(tr("failed to send the \"Test start!\" packet!"));
         udpHeartbeatTimer.stop();
         emit unexpectedSocketError();
         return;
